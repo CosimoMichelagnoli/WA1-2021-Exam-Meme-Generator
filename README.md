@@ -1,4 +1,4 @@
-# Exam 2: "Meme generator"
+# Exam #2: "Meme generator"
 ## Student: s291262 Michelagnoli Cosimo 
 
 ## React Client Application Routes
