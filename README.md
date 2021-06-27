@@ -1,5 +1,5 @@
-# Exam #1234: "Exam Title"
-## Student: s123456 LASTNAME FIRSTNAME 
+# Exam 2: "Meme generator"
+## Student: s291262 Michelagnoli Cosimo 
 
 ## React Client Application Routes
 
