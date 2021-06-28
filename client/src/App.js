@@ -7,63 +7,41 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { Form, Button, Container, Row, Col, Navbar } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { logo_icon } from './icons';
-
+import { LogoutButton, LoginForm } from './LoginComponents';
+import { MyNav } from './Components';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false); // at the beginning, no user is logged in
+
+  const doLogIn = async (credentials) => {/*
+    console.log("in doLogIn of app.js");
+    try {
+      const user = await API.logIn(credentials);
+      setLoggedIn(true);
+      setMessage({ msg: `Welcome, ${user}!`, type: 'success' });
+    } catch (err) {
+      setMessage({ msg: err, type: 'danger' });
+      return "Not authorized";
+    }
+  */}
+
+  const doLogOut = async () => {/*
+    await API.logOut();
+    setLoggedIn(false);
+    // clean up everything
+    //setCourses([]);
+    //setExams([]);
+  */}
   return (
     <Router>
 
-      <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="#home">
-          <img
-            alt=""
-            src="logo.svg"
-            width="30"
-            height="30"
-            className="d-inline-block align-top"
-          />{' '}
-      React Bootstrap
-    </Navbar.Brand>
-        {loggedIn ? <Button variant="primary" type="submit" size="md" > Logout </Button> : <Redirect to="/" />}
-      </Navbar>
+     <MyNav  loggedIn={loggedIn} doLogOut={doLogOut}/>
+
       <Container fluid >
         <Switch>
           
-            <Route exact path="/" render={() =>
-              <>
-                {' '}
-                <Row className="justify-content-center">
-                  <Col xs={5} sm={5} md={3} lg={3} xl={3} >
-                    <Form className='below-nav'>
-                      <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" />
-                        <Form.Text className="text-muted">
-                          We'll never share your email with anyone else.</Form.Text>
-                      </Form.Group>
+            <Route exact path="/" render={() =>  loggedIn ? <Redirect to="/main" /> : <LoginForm login={doLogIn} /> } />
 
-                      <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" />
-                      </Form.Group>
-                      <Form.Group controlId="formBasicCheckbox">
-                        <Form.Check type="checkbox" label="Check me out" />
-                      </Form.Group>
-                      <div className="mb-2">
-                        <Button variant="primary" type="submit">
-                          Submit </Button>
-                      </div>
-                      <div>
-                        <Button variant="secondary" type="submit" size="md">
-                          Check out the memes!              </Button>
-                      </div>
-                    </Form>
-                  </Col>
-                </Row>
-              </>
-            } />
-
-            <Route path="/surveys" render={() =>
+            <Route path="/main" render={() =>
               <p>FUNZIONI?</p>
             } />
             <Route path="/portal" render={() =>
