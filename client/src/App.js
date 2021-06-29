@@ -6,9 +6,8 @@ import { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Navbar } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { logo_icon } from './icons';
 import { LogoutButton, LoginForm } from './LoginComponents';
-import { MyNav } from './Components';
+import { MyNav, MyMain, MyMeme, MyEdit } from './Components';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false); // at the beginning, no user is logged in
 
@@ -34,19 +33,31 @@ function App() {
   return (
     <Router>
 
-     <MyNav  loggedIn={loggedIn} doLogOut={doLogOut}/>
+      <MyNav loggedIn={loggedIn} doLogOut={doLogOut} doLogIn={doLogIn} />
 
       <Container fluid >
         <Switch>
-          
-            <Route exact path="/" render={() =>  loggedIn ? <Redirect to="/main" /> : <LoginForm login={doLogIn} /> } />
 
-            <Route path="/main" render={() =>
-              <p>FUNZIONI?</p>
-            } />
-            <Route path="/portal" render={() =>
-              <p>FUNZIONI?</p>
-            } />
+          <Route exact path="/" render={() =>
+            <Redirect to="/home" />}
+          />
+
+          <Route path="/login" render={() =>
+            <LoginForm login={doLogIn} />}
+          />
+
+          <Route path="/home" render={() =>
+            <MyMain/>
+          } />
+
+          <Route path="/meme:id" render={() =>
+            <MyMeme/>
+          } />
+
+          <Route path="/edit" render={() =>
+            <MyEdit/>
+          }/>
+
         </Switch>
       </Container>
     </Router>

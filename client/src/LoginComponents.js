@@ -70,10 +70,6 @@ function LoginForm(props) {
               <Button variant="primary" type="submit">
                 Submit </Button>
             </div>
-            <div>
-              <Button variant="secondary" type="submit" size="md">
-                Check out the memes!              </Button>
-            </div>
           </Form>
         </Col>
       </Row>)
@@ -82,7 +78,7 @@ function LoginForm(props) {
   function LogoutButton(props) {
     return (
       <Col>
-        <Button variant="success " onClick={() => { props.doLogOut() }}>Logout</Button>
+        <Button variant="outline-light" onClick={() => { props.doLogOut() }}>Logout</Button>
       </Col>
     )
   }
