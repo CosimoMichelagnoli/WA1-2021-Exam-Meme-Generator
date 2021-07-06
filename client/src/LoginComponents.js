@@ -8,20 +8,13 @@ function LoginForm(props) {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
   
-    function notValidEmail(mail) {
-      if (/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/.test(mail)) {
-        return (false)
-      }
-      return (true)
-    }
-  
     const handleSubmit = async (event) => {
       event.preventDefault();
       setErrorMessage('');
       const credentials = { username, password };
-      const notValidFormEmail=notValidEmail(username);
+      
       let valid = true;
-      if (username === '' || password === '' || password.length < 6 || notValidFormEmail)
+      if (username === '' || password === '' || password.length < 6 )
         valid = false;
   
       if (valid) {
@@ -39,9 +32,7 @@ function LoginForm(props) {
         // show a better error message...
         let msg;
         if(username==='')
-          msg='Email is empty';
-        if(notValidFormEmail)
-          msg='Email format is not valid';
+          msg='Username is empty';
         if(password.length<6)
           msg='Password cannot be shorter than 6';
         setErrorMessage(msg);
@@ -54,20 +45,20 @@ function LoginForm(props) {
           <Form className='below-nav'>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
+              <Form.Control type="username" placeholder="Enter username" value={username} onChange={ev => setUsername(ev.target.value)} />
               <Form.Text className="text-muted">
-                We'll never share your email with anyone else.</Form.Text>
+                We'll never share your datal with anyone else.</Form.Text>
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" />
+              <Form.Control type="password" placeholder="Password" value={password} onChange={ev => setPassword(ev.target.value)} />
             </Form.Group>
             <Form.Group controlId="formBasicCheckbox">
               <Form.Check type="checkbox" label="Check me out" />
             </Form.Group>
             <div className="mb-2">
-              <Button variant="primary" type="submit">
+              <Button onClick={handleSubmit} variant="primary" type="submit">
                 Submit </Button>
             </div>
           </Form>
