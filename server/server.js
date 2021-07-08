@@ -138,8 +138,16 @@ app.get('/api/memes/images/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json(error);
   }
-
 });
+
+app.get('/api/allImages', (req, res) => {
+  dao.getImages()
+    .then((images) => res.json(images))
+    .catch((error) => { res.status(500).json(error); });
+});
+
+
+//TODO
 
 app.post('/api/tasks/insert', isLoggedIn, async (req, res) => {
   const description = req.body.description;

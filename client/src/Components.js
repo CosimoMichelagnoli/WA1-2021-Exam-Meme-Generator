@@ -2,28 +2,29 @@ import { BrowserRouter as Router, Switch, Route, Redirect, NavLink } from 'react
 import { useEffect, useState } from 'react';
 import { Navbar, Form, Nav, FormControl, ListGroup, Button, Col, Row, Modal, Container, Alert, Figure, DropdownButton, Dropdown } from 'react-bootstrap';
 import { LogoutButton, LoginForm } from './LoginComponents';
-import { logo_icon, trash_icon, copy_icon} from './icons';
+import { logo_icon, trash_icon, copy_icon } from './icons';
 import FigureCaption from 'react-bootstrap/esm/FigureCaption';
 import { useHistory } from "react-router-dom";
 import Image from 'react-bootstrap/Image'
-import drake from './memeImages/meme1.png';
-import meme2 from './memeImages/meme2squid.jpg';
-import meme3 from './memeImages/meme3pooh.jpg';
+import Ed_Edd_eddy from './memeImages/Ed_Edd_eddy.png';
+import lisa from './memeImages/lisa.jpg';
+import squiddy from './memeImages/squiddy.jpg';
+import Winnypooh from './memeImages/Winnypooh.jpg';
 const styleHighTextmeme1_2l = { position: "absolute", bottom: "67%", left: "7%", width: "30%" };
 const styleLowTextmeme1_2l = { position: "absolute", bottom: "25%", left: "7%", width: "30%" };
 const styleHighTextmeme3l = { position: "absolute", bottom: "67%", left: "51%", width: "30%" };
 const styleLowTextmeme3l = { position: "absolute", bottom: "25%", left: "51%", width: "30%" };
 
-const selectImage= (name)=>{
-    let output="imageError";
-    switch(name){
+const selectImage = (name) => {
+    let output = "imageError";
+    switch (name) {
         case 'drake':
-            output=drake;
+            output = Ed_Edd_eddy;
             break;
         default:
-            output='imageError';
+            output = 'imageError';
     }
-    console.log("switch:"+output);
+    console.log("switch:" + output);
     return output;
 }
 
@@ -59,17 +60,24 @@ function MyMain(props) {
     const changeTemp = (t) => {
         setMemeTemp(t);
     }
-    /*useEffect(() => {
-        async function loadTasks() {
-            const response = await fetch('/api/tasks?filter=' + props.filtername);
-            const tasks = await response.json();
-            props.setTask(tasks);
-        }
-        loadTasks().catch(err => {
+    useEffect(() => {
+        async function loadMemes() {
+            const response = await fetch('/api/allImages');
+            const images = await response.json();
 
-            console.error(err);
-        });
-    }, [props.update]);*/
+            props.setImages(images);
+        }
+        loadMemes();
+    }, []);
+    useEffect(() => {
+        async function loadMemes() {
+            const response = props.loggedIn ? await fetch('/api/memes') : await fetch('/api/public/memes');
+            const memes = await response.json();
+
+            props.setMemes(memes);
+        }
+        loadMemes();
+    }, [props.update]);
     useEffect(() => {
         async function loadMemes() {
             const response = props.loggedIn ? await fetch('/api/memes') : await fetch('/api/public/memes');
@@ -84,14 +92,13 @@ function MyMain(props) {
             <h1 align="center">Memes list</h1>
 
             <ListGroup className="list-group list-group-flush" >
-                {console.log(props.meme)}
                 {props.meme.map((meme) => (<Memes meme={meme} setTempMeme={props.setTempMeme} />))}
             </ListGroup>
             <Form inline className="mr-auto" >
                 <span className="mr-auto"></span>
                 <Button onClick={() => setModalShow(true)}>&#43;</Button>
             </Form>
-            <MydModalWithGrid flagUpdate={flagUpdate} setFlagUpdate={setFlagUpdate} show={modalShow} description={description} setDescription={setDescription} privacy={privacy} setPrivacy={setPrivacy} date={date} setDate={setDate} important={important} setImportant={setImportant} id={id} setId={setId} onHide={() => setModalShow(false)} setTaskTemp={changeTemp} {...props} />
+            <MydModalWithGrid memes={props.meme} images={props.images} flagUpdate={flagUpdate} setFlagUpdate={setFlagUpdate} show={modalShow} description={description} setDescription={setDescription} privacy={privacy} setPrivacy={setPrivacy} date={date} setDate={setDate} important={important} setImportant={setImportant} id={id} setId={setId} onHide={() => setModalShow(false)} setTaskTemp={changeTemp} {...props} />
 
         </main>);
 }
@@ -135,13 +142,13 @@ function MyMeme(props) {
             const image = await response.json();
             console.log(image.name);
             props.setMemeImage(image);
-            document.getElementById("loadMemeImage").src=selectImage(image.name);
+            document.getElementById("loadMemeImage").src = selectImage(image.name);
         }
-        
+
         loadMemeImage();
-        
+
     }, []);
-    
+
     function back(e) {
         e.preventDefault();
         history.push("/");
@@ -153,12 +160,15 @@ function MyMeme(props) {
                     <Image id="loadMemeImage" style={{
                         width: '700px',
                         height: '500px'
-                    }} fluid />;
+                    }} fluid />
                     <FigureCaption style={styleHighTextmeme1_2l} >
-                        {props.tempMeme.text1}
+                        {props.tempMeme.text1 ? props.tempMeme.text1 : ""}
                     </FigureCaption>
                     <FigureCaption style={styleLowTextmeme1_2l} >
-                        {props.tempMeme.text2}
+                        {props.tempMeme.text2 ? props.tempMeme.text2 : ""}
+                    </FigureCaption>
+                    <FigureCaption style={styleLowTextmeme1_2l} >
+                        {props.tempMeme.text3 ? props.tempMeme.text3 : ""}
                     </FigureCaption>
                 </Figure>
             </Container>
@@ -177,6 +187,25 @@ function MyMeme(props) {
 function MydModalWithGrid(props) {
 
     const [errorMessage, setErrorMessage] = useState('');
+    const [selectedImage, setSelectedImage] = useState(undefined);
+    const [title, setTitle] = useState("");
+    const [text1, setText1] = useState("");
+    const [text2, setText2] = useState("");
+    const [text3, setText3] = useState("");
+
+
+
+
+    function select(eventKey, event) {
+        event.preventDefault();
+        document.getElementById("loadMemeImageModal").src = selectImage(eventKey);
+        props.images.forEach(element => {
+            if (element.name == eventKey)
+                setSelectedImage(element);
+
+        });
+
+    }
 
     if (props.temp) {
         props.setDescription(props.temp.description);
@@ -229,7 +258,7 @@ function MydModalWithGrid(props) {
 
     }
     return (
-        <Modal {...props} aria-labelledby="contained-modal-title-vcenter" centered>
+        <Modal size="lg"  {...props} aria-labelledby="contained-modal-title-vcenter" centered>
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
                     Add new meme
@@ -239,14 +268,54 @@ function MydModalWithGrid(props) {
                 <Container>
                     {errorMessage !== '' ? <Alert variant='danger'>{errorMessage}</Alert> : ''}
                     <Row>
-                        <Col xs={12} md={6}>
+                        <Col md={8} lg={8}>
+                            <Image id="loadMemeImageModal" style={{
+                                width: '500px',
+                                height: '300px'
+                            }} fluid />
+                            <FigureCaption style={styleHighTextmeme1_2l} >
+                                {text1 != "" ? text1 : ""}
+                            </FigureCaption>
+                            <FigureCaption style={styleLowTextmeme1_2l} >
+                                {text2 != "" ? text2 : ""}
+                            </FigureCaption>
+                            <FigureCaption style={styleLowTextmeme1_2l} >
+                                {text3 != "" ? text3 : ""}
+                            </FigureCaption>
+                        </Col>
+                        <Col md={2} lg={3}>
+                            <DropdownButton id="dropdown-basic-button" className="mr-auto" title="Dropdown button">
+                                {props.images.map((image) => (<Dropdown.Item eventKey={image.name} onSelect={select}>
+                                    {image.name}
+                                </Dropdown.Item>))}
+                            </DropdownButton>
+                            {selectedImage != undefined ?
+                                <Row>
+                                    <Form>
+                                        <Form.Group >
+                                            <Form.Label>Text1</Form.Label>
+                                            <Form.Control type="text" placeholder="Enter description" value={text1} onChange={ev => { setText1(ev.target.value) }} />
+                                        </Form.Group >
+                                        {selectedImage.ntext > 1 ? <Form.Group >
+                                            <Form.Label>Text2</Form.Label>
+                                            <Form.Control type="text" placeholder="Enter description" value={text2} onChange={ev => { setText2(ev.target.value) }} />
+                                        </Form.Group > : ""}
+                                        {selectedImage.ntext > 2 ? <Form.Group >
+                                            <Form.Label>Text3</Form.Label>
+                                            <Form.Control type="text" placeholder="Enter description" value={text3} onChange={ev => { setText3(ev.target.value) }} />
+                                        </Form.Group >
+                                            : ""}
+
+                                    </Form>
+                                </Row> : ""
+                            }
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={12} md={3}>
                             <Form>
+
                                 <Form.Group controlid="formDescription">
-                                    <DropdownButton id="dropdown-basic-button" title="Dropdown button">
-                                        <Dropdown.Item href="#/action-1">meme1</Dropdown.Item>
-                                        <Dropdown.Item href="#/action-2">meme2</Dropdown.Item>
-                                        <Dropdown.Item href="#/action-3">meme3</Dropdown.Item>
-                                    </DropdownButton>
                                     <Form.Label>Meme title</Form.Label>
                                     <Form.Control type="text" placeholder="Enter description" value={props.description} onChange={ev => { props.setDescription(ev.target.value); }}
                                         onKeyPress={event => {

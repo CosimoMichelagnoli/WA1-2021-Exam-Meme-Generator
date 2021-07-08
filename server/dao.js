@@ -73,6 +73,32 @@ exports.getById = (id) => {
 
   });
 }
+
+
+exports.getImages = () => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * FROM IMAGES ';
+    db.all(sql, (err, rows) => {
+      if (err) {
+        console.log("errore");
+        reject(err);
+        return;
+      } else {
+
+        let memes = [];
+        memes= rows.map((row)=>({imageID: row.imageID, name: row.name, ntext: row.ntext, position1: row.position1, position2: row.position2, position3: row.position3 }));
+        
+        resolve(memes);
+      }
+
+
+    });
+  });
+}
+
+
+//TODO
+
 async function getLastId() {
   const sql1 = 'SELECT MAX(id) FROM TASKS';
   return new Promise((resolve, reject) => {
@@ -88,6 +114,8 @@ async function getLastId() {
     });
   });
 }
+
+
 exports.createTask = (task, userId) => {
   return new Promise(async (resolve, reject) => {
     let lastId = await getLastId();

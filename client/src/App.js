@@ -14,6 +14,8 @@ import { MyNav, MyMain, MyMeme, MyEdit } from './Components';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false); // at the beginning, no user is logged in
   const [meme, setMemes] = useState([]);
+  const [images, setImages] = useState([]);
+
   const [message, setMessage] = useState('');
   const [update, setUpdate] = useState(0);
   const [tempMeme, setTempMeme] = useState('');
@@ -57,7 +59,7 @@ function App() {
           />
 
           <Route path="/home" render={() =>
-            <MyMain meme={meme} update={update} setMemes={setMemes} setUpdate={setUpdate} loggedIn = {loggedIn} setTempMeme={setTempMeme} />
+            <MyMain meme={meme} images={images} update={update} setMemes={setMemes} setImages={setImages} setUpdate={setUpdate} loggedIn = {loggedIn} setTempMeme={setTempMeme} />
           } />
 
           <Route path="/meme:id" render={() =>

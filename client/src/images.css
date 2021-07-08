@@ -1,0 +1,126 @@
+.messiTrollo{
+    position : absolute;
+    width : 25%;
+    text-align: center;
+    font-size: x-large;
+    left : 38%;
+    top : 48%
+  }
+  
+.candreva1{
+    position : absolute;
+    width : 25%;
+    text-align: center;
+    font-size: x-large;
+    left : 38%;
+    top : 1% 
+}
+.candreva2{
+    position : absolute;
+    width : 25%;
+    text-align: center;
+    font-size: x-large;
+    left : 38%;
+    bottom : 5% 
+}
+
+.drake1{
+    position : absolute;
+    width : 25%;
+    font-size: x-large;
+    right : 0%;
+    bottom : 70% 
+}
+.drake2{
+    position : absolute;
+    width : 25%;
+    font-size: x-large;
+    right : 0%;
+    bottom : 30% 
+}
+
+.chubbyBubbles{
+    position : absolute;
+    width : 25%;
+    text-align: center;
+    font-size: x-large;
+    right : 0%;
+    bottom : 70% 
+}
+
+.butterflyMan1{
+    position : absolute;
+    width : 25%;
+    text-align: center;
+    font-size: x-large;
+    left : 38%;
+    bottom : 5% 
+}
+.butterflyMan2{
+    position : absolute;
+    width : 25%;
+    text-align: center;
+    font-size: x-large;
+    right : 0%;
+    bottom : 30% 
+}
+.butterflyMan3{
+    position : absolute;
+    width : 25%;
+    text-align: center;
+    font-size: x-large;
+    left : 20%;
+    top : 25% 
+}
+
+.distractedBoyfriend1{
+    position : absolute;
+    width : 25%;
+    text-align: center;
+    font-size: x-large;
+    left : 38%;
+    bottom : 50% 
+}
+
+.distractedBoyfriend2{
+    position : absolute;
+    width : 25%;
+    text-align: center;
+    font-size: x-large;
+    right : 0%;
+    bottom : 45% 
+}
+.distractedBoyfriend3{
+    position : absolute;
+    width : 25%;
+    text-align: center;
+    font-size: x-large;
+    left : 0%;
+    bottom : 5% 
+}
+.white{
+    color: white;
+}
+
+.yellow{
+    color:yellow;
+}
+.black{
+    color:black;
+}
+
+.comicSans{
+    font-family: cursive
+}
+
+.timesNewRoman{
+    font-family: 'Times New Roman'
+}
+
+.impact{
+    font-family: Impact;
+}
+
+.arial{
+    font-family: Arial, Helvetica, sans-serif;
+}
