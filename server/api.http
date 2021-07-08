@@ -1,0 +1,50 @@
+## GET ALL MEMES PROTECTED
+GET http://localhost:3001/api/memes
+Content-Type: application/json
+
+## GET ALL MEMES 
+GET  http://localhost:3001/api/public/memes
+Content-Type: application/json
+
+### GET TASKS BY FILTERS
+GET http://localhost:3001/api/tasks?filter=2021-04-14-8:30
+Content-Type: application/json
+
+### GET TASK n
+GET http://localhost:3001/api/tasks/10
+Content-Type: application/json
+
+### INSERT NEW TASK
+
+POST  http://localhost:3001/api/tasks/insert 
+Content-Type: application/json
+
+{"description": "Avoid nuclear reactor to explode", "important": "1", "private" : "0", "deadline": "2021-06-09 18:50"}
+
+
+### UPDATE A TASK
+
+PUT  http://localhost:3001/api/tasks/update
+Content-Type: application/json
+
+{"id": "1", "description": "Let the nuclear reactor to explode", "important": "1", "private" : "0", "deadline": "2021-22-31 58:49"}
+
+
+### MARK A TASK AS COMPLETED/UNCOMPLETED
+
+PATCH  http://localhost:3001/api/tasks/mark
+Content-Type: application/json
+
+{"id": "14", "completed": "0"}
+
+
+### DELETE A TASK
+
+DELETE  http://localhost:3001/api/tasks/delete/14
+Content-Type: application/json
+
+
+
+
+
+

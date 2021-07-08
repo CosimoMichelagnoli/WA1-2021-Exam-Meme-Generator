@@ -1,8 +1,6 @@
 import memeIcon from './images/memeIcon.png';
 import Image from 'react-bootstrap/Image'
-import meme1 from './memeImages/meme1.png';
-import meme2 from './memeImages/meme2squid.jpg';
-import meme3 from './memeImages/meme3pooh.jpg';
+
 const logo_icon = <Image src = {memeIcon} style={{
     backgroundColor: 'white',
     width: '60px',
@@ -19,16 +17,5 @@ const copy_icon=<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" f
 <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
 <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
 </svg>
-const meme1l = <Image src= {meme1} style={{
-    width: '700px',
-    height: '500px'
-  }}  fluid/>;
-const meme2l = <Image src= {meme2} style={{
-    width: '700px',
-    height: '500px'
-  }} fluid/>;
-const meme3l = <Image src= {meme3} style={{
-    width: '700px',
-    height: '500px'
-  }} fluid/>;
-export {logo_icon, trash_icon, copy_icon, meme1l, meme2l, meme3l};
+
+export {logo_icon, trash_icon, copy_icon};

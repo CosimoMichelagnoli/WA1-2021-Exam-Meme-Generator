@@ -2,19 +2,36 @@ import { BrowserRouter as Router, Switch, Route, Redirect, NavLink } from 'react
 import { useEffect, useState } from 'react';
 import { Navbar, Form, Nav, FormControl, ListGroup, Button, Col, Row, Modal, Container, Alert, Figure, DropdownButton, Dropdown } from 'react-bootstrap';
 import { LogoutButton, LoginForm } from './LoginComponents';
-import { logo_icon, trash_icon, copy_icon, meme1l, meme2l, meme3l } from './icons';
+import { logo_icon, trash_icon, copy_icon} from './icons';
 import FigureCaption from 'react-bootstrap/esm/FigureCaption';
-
-
+import { useHistory } from "react-router-dom";
+import Image from 'react-bootstrap/Image'
+import drake from './memeImages/meme1.png';
+import meme2 from './memeImages/meme2squid.jpg';
+import meme3 from './memeImages/meme3pooh.jpg';
 const styleHighTextmeme1_2l = { position: "absolute", bottom: "67%", left: "7%", width: "30%" };
 const styleLowTextmeme1_2l = { position: "absolute", bottom: "25%", left: "7%", width: "30%" };
 const styleHighTextmeme3l = { position: "absolute", bottom: "67%", left: "51%", width: "30%" };
 const styleLowTextmeme3l = { position: "absolute", bottom: "25%", left: "51%", width: "30%" };
+
+const selectImage= (name)=>{
+    let output="imageError";
+    switch(name){
+        case 'drake':
+            output=drake;
+            break;
+        default:
+            output='imageError';
+    }
+    console.log("switch:"+output);
+    return output;
+}
+
 function MyNav(props) {
 
     return (
         <Navbar bg="dark" variant="dark" style={{ marginBottom: "1%" }}>
-            <Navbar.Brand href="/">
+            <Navbar.Brand>
                 <p style={{ margin: "0px" }}>{logo_icon}  <font size="6" >Meme Generator</font></p>
             </Navbar.Brand>
             <Nav className="mr-auto">
@@ -30,42 +47,63 @@ function MyNav(props) {
 }
 
 function MyMain(props) {
+
     const [modalShow, setModalShow] = useState(false);
     const [flagUpdate, setFlagUpdate] = useState(false);
     const [description, setDescription] = useState('');
     const [privacy, setPrivacy] = useState(false);
-    const [taskTemp, setTaskTemp] = useState(false);
+    const [memeTemp, setMemeTemp] = useState(false);
     const [date, setDate] = useState(undefined);
     const [important, setImportant] = useState(false);
     const [id, setId] = useState(props.meme.length + 1);
     const changeTemp = (t) => {
-        setTaskTemp(t);
+        setMemeTemp(t);
     }
+    /*useEffect(() => {
+        async function loadTasks() {
+            const response = await fetch('/api/tasks?filter=' + props.filtername);
+            const tasks = await response.json();
+            props.setTask(tasks);
+        }
+        loadTasks().catch(err => {
+
+            console.error(err);
+        });
+    }, [props.update]);*/
+    useEffect(() => {
+        async function loadMemes() {
+            const response = props.loggedIn ? await fetch('/api/memes') : await fetch('/api/public/memes');
+            const memes = await response.json();
+
+            props.setMemes(memes);
+        }
+        loadMemes();
+    }, [props.loggedIn]);
     return (
         <main className="mr-auto">
             <h1 align="center">Memes list</h1>
 
             <ListGroup className="list-group list-group-flush" >
-                <Memes />
-                <Memes />
-                {/*props.tasks.map((task) => (<MyTask temp={taskTemp} setTaskTemp={changeTemp} modal={setModalShow} updateTask={props.updateTask} deleteTask={props.deleteTask} key={task.id} task={task} />))*/}
+                {console.log(props.meme)}
+                {props.meme.map((meme) => (<Memes meme={meme} setTempMeme={props.setTempMeme} />))}
             </ListGroup>
             <Form inline className="mr-auto" >
                 <span className="mr-auto"></span>
                 <Button onClick={() => setModalShow(true)}>&#43;</Button>
             </Form>
-            <MydModalWithGrid flagUpdate={flagUpdate} setFlagUpdate={setFlagUpdate} show={modalShow} description={description} setDescription={setDescription} privacy={privacy} setPrivacy={setPrivacy} date={date} setDate={setDate} important={important} setImportant={setImportant} id={id} setId={setId} onHide={() => setModalShow(false)} temp={taskTemp} setTaskTemp={changeTemp} {...props} />
+            <MydModalWithGrid flagUpdate={flagUpdate} setFlagUpdate={setFlagUpdate} show={modalShow} description={description} setDescription={setDescription} privacy={privacy} setPrivacy={setPrivacy} date={date} setDate={setDate} important={important} setImportant={setImportant} id={id} setId={setId} onHide={() => setModalShow(false)} setTaskTemp={changeTemp} {...props} />
 
         </main>);
 }
 
 function Memes(props) {
+    const thisMeme = props.meme;
     return (
         <ListGroup.Item className="d-flex w-100 justify-content-center">
             <Container fluid>
                 <Row>
                     <Col xs={3} sm={2} md={3} lg={3} xl={3} >
-                        <NavLink to="/meme1"> Meme 1 </NavLink>
+                        <NavLink to={'/meme' + thisMeme.memeID} onClick={() => props.setTempMeme(thisMeme)}> {props.meme.title} </NavLink>
                         {/*<Form.Check type="checkbox" id={`check-t${props.task.id}`} className={props.task.important ? "important" : ""} label={props.task.description} checked={completed} onChange={ev => { setCompleted(ev.target.checked); API.completeTask({ id: props.task.id, completed: ev.target.checked ? 1 : 0 }) }} />*/}
                     </Col>
                     <Col xs={2} sm={2} md={2} lg={2} xl={3}>
@@ -88,27 +126,50 @@ function Memes(props) {
 }
 
 function MyMeme(props) {
+    const history = useHistory();
+    console.log(props.tempMeme.imageID);
+    useEffect(() => {
+
+        async function loadMemeImage() {
+            const response = await fetch('/api/memes/images/' + props.tempMeme.imageID);
+            const image = await response.json();
+            console.log(image.name);
+            props.setMemeImage(image);
+            document.getElementById("loadMemeImage").src=selectImage(image.name);
+        }
+        
+        loadMemeImage();
+        
+    }, []);
+    
+    function back(e) {
+        e.preventDefault();
+        history.push("/");
+    }
     return (<Row>
         <Col>
             <Container>
                 <Figure className="position-relative" font="comi">
-                    {meme1l}
+                    <Image id="loadMemeImage" style={{
+                        width: '700px',
+                        height: '500px'
+                    }} fluid />;
                     <FigureCaption style={styleHighTextmeme1_2l} >
-                        Marameo ajckdksnavkjavjnakjcn akjcbakjvnajvlasjdbv
+                        {props.tempMeme.text1}
                     </FigureCaption>
                     <FigureCaption style={styleLowTextmeme1_2l} >
-                        Marameo ajvncdsak jlvnkalsjvnklaj
+                        {props.tempMeme.text2}
                     </FigureCaption>
                 </Figure>
             </Container>
         </Col>
         <Col>
             <Container className="mr-auto">
-                <h1>Title meme</h1>
-                <p>Author</p>
+                <h1>{props.tempMeme.title}</h1>
+                <p>{props.tempMeme.creator}</p>
             </Container>
             <div style={{ marginTop: "50%" }}>
-                <Button variant="outline-dark" href="/">Back to list</Button>
+                <Button variant="outline-dark" onClick={back}>Back to list</Button>
             </div>
         </Col>
     </Row>);

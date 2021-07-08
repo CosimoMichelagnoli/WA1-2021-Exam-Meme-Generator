@@ -47,15 +47,12 @@ function LoginForm(props) {
               <Form.Label>Email address</Form.Label>
               <Form.Control type="username" placeholder="Enter username" value={username} onChange={ev => setUsername(ev.target.value)} />
               <Form.Text className="text-muted">
-                We'll never share your datal with anyone else.</Form.Text>
+                We'll never share your data with anyone else.</Form.Text>
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control type="password" placeholder="Password" value={password} onChange={ev => setPassword(ev.target.value)} />
-            </Form.Group>
-            <Form.Group controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Check me out" />
             </Form.Group>
             <div className="mb-2">
               <Button onClick={handleSubmit} variant="primary" type="submit">

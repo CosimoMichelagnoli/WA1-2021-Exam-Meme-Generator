@@ -8,60 +8,56 @@ const sqlite = require('sqlite3');
 
 
 // open the database
-const db = new sqlite.Database('tasks.db', (err) => {
+const db = new sqlite.Database('meme.db', (err) => {
   if (err) throw err;
 });
 
 
 
-exports.filterTasks = (filter, userId) => {
+exports.filterMemesCreators = () => {
   return new Promise((resolve, reject) => {
-    const sql = 'SELECT * FROM TASKS WHERE user=?';
-    db.all(sql, [userId], (err, rows) => {
+    const sql = 'SELECT * FROM MEME ';
+    db.all(sql, (err, rows) => {
       if (err) {
+        console.log("errore");
         reject(err);
         return;
       } else {
 
-        let tasks = [];
-        if (filter === 'All') {
-          tasks = rows.map((t) => ({ id: t.id, description: t.description, important: t.important, private: t.private, deadline: t.deadline, completed: t.completed, user: t.user }));
-
-        }
-        if (filter === 'Important') {
-          console.log("case important, date is ");
-          tasks = rows.map((t) => ({ id: t.id, description: t.description, important: t.important, private: t.private, deadline: t.deadline, completed: t.completed, user: t.user })).filter(e => e.important);
-
-        }
-        if (filter === 'Private') {
-          tasks = rows.map((t) => ({ id: t.id, description: t.description, important: t.important, private: t.private, deadline: t.deadline, completed: t.completed, user: t.user })).filter(e => e.private);
-        }
-        if (filter === 'Today') {
-          tasks = rows.map((t) => ({ id: t.id, description: t.description, important: t.important, private: t.private, deadline: t.deadline, completed: t.completed, user: t.user })).filter(e => dayjs(e.deadline).format('YYYY-MM-DD').localeCompare(dayjs().format('YYYY-MM-DD')) == 0);
-        }
-        if (filter === 'Next7Days') {
-          tasks = rows.map((t) => ({ id: t.id, description: t.description, important: t.important, private: t.private, deadline: t.deadline, completed: t.completed, user: t.user })).filter(e => dayjs().diff(dayjs(e.deadline).format("MMMM D, YYYY"), 'day', true) >= -7 && dayjs().diff(dayjs(e.deadline).format("MMMM D, YYYY"), 'day', true) <= 0);
-        }
-        //        if (dayjs(filter).isValid()) {
-        //          tasks = rows.map((t) => ({ id: t.id, description: t.description, important: t.important, private: t.private, deadline: t.deadline, completed: t.completed, user: t.user })).filter(e => dayjs(e.deadline).format('YYYY-MM-DD').localeCompare(dayjs(filter).format('YYYY-MM-DD')) == 0);
-        //        }
-        if (filter === undefined || filter === null) {
-          tasks = rows.map((t) => ({ id: t.id, description: t.description, important: t.important, private: t.private, deadline: t.deadline, completed: t.completed, user: t.user }));
-        }
-
-        resolve(tasks);
+        let memes = [];
+        memes= rows.map((m)=>({memeID: m.memeID, title: m.title, imageID: m.imageID, color: m.color, font: m.font, ntext: m.ntext, text1: m.text1, text2: m.text2, text3: m.text3, protected: m.protected, creator: m.creator }));
+        
+        resolve(memes);
       }
 
 
     });
   });
 }
+exports.filterMemes = () => {
+    return new Promise((resolve, reject) => {
+      const sql = 'SELECT * FROM MEME WHERE protected = 0';
+      db.all(sql, (err, rows) => {
+        if (err) {
+          reject(err);
+          return;
+        } else {
+  
+          let memes = [];
+          memes= rows.map((m)=>({memeID: m.memeID, title: m.title, imageID: m.imageID, color: m.color, font: m.font, ntext: m.ntext, text1: m.text1, text2: m.text2, text3: m.text3, protected: m.protected, creator: m.creator }));
+          
+          resolve(memes);
+        } 
+  
+      });
+    });
+  }
 
 
-exports.getById = (id, userId) => {
+exports.getById = (id) => {
   return new Promise((resolve, reject) => {
-    const sql = 'SELECT * FROM TASKS WHERE id=? AND user=?';
-    db.get(sql, [id, userId], (err, row) => {
+    const sql = 'SELECT * FROM IMAGES WHERE imageID=? ';
+    db.get(sql, [id], (err, row) => {
       if (err) {
         reject(err);
         return;
@@ -69,9 +65,8 @@ exports.getById = (id, userId) => {
         if (row == undefined) {
           reject({ error: 'Course not found.' });
         } else {
-          const task = { id: row.id, description: row.description, important: row.important, private: row.private, deadline: row.deadline, completed: row.completed, user: row.user };
-          console.log(row);
-          resolve(task);
+          let image = { imageID: row.imageID, name: row.name, ntext: row.ntext, position1: row.position1, position2: row.position2, position3: row.position3 };
+          resolve(image);
         }
       }
     });

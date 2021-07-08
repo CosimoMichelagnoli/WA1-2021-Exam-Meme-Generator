@@ -117,16 +117,24 @@ app.delete('/api/sessions/current', (req, res) => {
   res.end();
 });
 
-app.get('/api/tasks', isLoggedIn, (req, res) => {
-  dao.filterTasks(req.query.filter, req.user.id)
-    .then((tasks) => res.json(tasks))
+app.get('/api/memes', isLoggedIn, (req, res) => {
+  console.log("what");
+  dao.filterMemesCreators()
+    .then((memes) => res.json(memes))
     .catch((error) => { res.status(500).json(error); });
 });
-app.get('/api/tasks/:id', isLoggedIn, async (req, res) => {
+
+app.get('/api/public/memes', (req, res) => {
+  dao.filterMemes()
+    .then((memes) => res.json(memes))
+    .catch((error) => { res.status(500).json(error); });
+});
+
+app.get('/api/memes/images/:id', async (req, res) => {
   const id = req.params.id;
   try {
-    let task = await dao.getById(id, req.user.id);
-    res.json(task);
+    const image = await dao.getById(id);
+    res.json(image);
   } catch (error) {
     res.status(500).json(error);
   }
