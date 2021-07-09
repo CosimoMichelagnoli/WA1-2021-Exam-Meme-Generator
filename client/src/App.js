@@ -1,7 +1,7 @@
 
 import logo from './logo.svg';
 import './App.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import API from "./API";
 
 
@@ -15,18 +15,35 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false); // at the beginning, no user is logged in
   const [meme, setMemes] = useState([]);
   const [images, setImages] = useState([]);
+  const [user, setUser] = useState([]);
 
   const [message, setMessage] = useState('');
   const [update, setUpdate] = useState(0);
   const [tempMeme, setTempMeme] = useState('');
   const [image, setMemeImage] = useState('');
   
-  
+  useEffect(() => {
+    console.log("useEffect of app.js");
+
+    const checkAuth = async () => {
+      try {
+        // here you have the user info, if already logged in
+        // TODO: store them somewhere and use them, if needed
+        const user = await API.getUserInfo();
+        setUser(user);
+        setLoggedIn(true);
+      } catch (err) {
+        console.error(err.error);
+      }
+    };
+    checkAuth();
+  }, [loggedIn]);
 
   const doLogIn = async (credentials) => {
     console.log("in doLogIn of app.js");
     try {
       const user = await API.logIn(credentials);
+
       setLoggedIn(true);
       setMessage({ msg: `Welcome, ${user}!`, type: 'success' });
     } catch (err) {
@@ -59,7 +76,7 @@ function App() {
           />
 
           <Route path="/home" render={() =>
-            <MyMain meme={meme} images={images} update={update} setMemes={setMemes} setImages={setImages} setUpdate={setUpdate} loggedIn = {loggedIn} setTempMeme={setTempMeme} />
+            <MyMain meme={meme} images={images} update={update} user={user} setMemes={setMemes} setImages={setImages} setUpdate={setUpdate} loggedIn = {loggedIn} setTempMeme={setTempMeme} />
           } />
 
           <Route path="/meme:id" render={() =>

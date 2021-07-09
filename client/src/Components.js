@@ -5,21 +5,40 @@ import { LogoutButton, LoginForm } from './LoginComponents';
 import { logo_icon, trash_icon, copy_icon } from './icons';
 import FigureCaption from 'react-bootstrap/esm/FigureCaption';
 import { useHistory } from "react-router-dom";
+import './images.css';
 import Image from 'react-bootstrap/Image'
+
+import Lisa from './memeImages/lisa.jpg';
+import Obama from './memeImages/Obama.png';
+
 import Ed_Edd_eddy from './memeImages/Ed_Edd_eddy.png';
-import lisa from './memeImages/lisa.jpg';
-import squiddy from './memeImages/squiddy.jpg';
+import Squiddy from './memeImages/squiddy.jpg';
+
 import Winnypooh from './memeImages/Winnypooh.jpg';
-const styleHighTextmeme1_2l = { position: "absolute", bottom: "67%", left: "7%", width: "30%" };
-const styleLowTextmeme1_2l = { position: "absolute", bottom: "25%", left: "7%", width: "30%" };
-const styleHighTextmeme3l = { position: "absolute", bottom: "67%", left: "51%", width: "30%" };
-const styleLowTextmeme3l = { position: "absolute", bottom: "25%", left: "51%", width: "30%" };
+import Wow from './memeImages/Wow.jpg';
+
+
 
 const selectImage = (name) => {
     let output = "imageError";
     switch (name) {
-        case 'drake':
+        case 'Lisa':
+            output = Lisa;
+            break;
+        case 'Obama':
+            output = Obama;
+            break;
+        case 'Ed_Edd_eddy':
             output = Ed_Edd_eddy;
+            break;
+        case 'Squiddy':
+            output = Squiddy;
+            break;
+        case 'Winnypooh':
+            output = Winnypooh;
+            break;
+        case 'Wow':
+            output = Wow;
             break;
         default:
             output = 'imageError';
@@ -92,11 +111,11 @@ function MyMain(props) {
             <h1 align="center">Memes list</h1>
 
             <ListGroup className="list-group list-group-flush" >
-                {props.meme.map((meme) => (<Memes meme={meme} setTempMeme={props.setTempMeme} />))}
+                {props.meme.map((meme) => (<Memes meme={meme} user={props.user} setTempMeme={props.setTempMeme} loggedIn={props.loggedIn}/>))}
             </ListGroup>
             <Form inline className="mr-auto" >
                 <span className="mr-auto"></span>
-                <Button onClick={() => setModalShow(true)}>&#43;</Button>
+                {props.loggedIn ? <Button onClick={() => setModalShow(true)}>&#43;</Button> : ""}
             </Form>
             <MydModalWithGrid memes={props.meme} images={props.images} flagUpdate={flagUpdate} setFlagUpdate={setFlagUpdate} show={modalShow} description={description} setDescription={setDescription} privacy={privacy} setPrivacy={setPrivacy} date={date} setDate={setDate} important={important} setImportant={setImportant} id={id} setId={setId} onHide={() => setModalShow(false)} setTaskTemp={changeTemp} {...props} />
 
@@ -121,14 +140,14 @@ function Memes(props) {
                         {/*<small>{props.task.deadline === undefined || props.task.deadline === null ? "" : `${dayjs(props.task.deadline).format("MMM D, YYYY")}`}</small>*/}
                     </Col>
                     <Col align="right" xs={3} sm={3} md={{ span: 2, offset: 1 }} lg={{ span: 2, offset: 1 }} xl={{ span: 2, offset: 1 }}>
-                        <span /*onClick={() => { props.setTaskTemp(props.task); props.modal(true); }}*/>{copy_icon}</span>
+                        {props.loggedIn?<span /*onClick={() => { props.setTaskTemp(props.task); props.modal(true); }}*/>{copy_icon}</span>:""}
                         {'  '}
-                        <span /*onClick={() => { props.deleteTask(props.task.id); }}*/ >{trash_icon}</span>
+                        {props.user?props.user.username == thisMeme.creator?<span /*onClick={() => { props.deleteTask(props.task.id); }}*/ >{trash_icon}</span>:"":""}
                     </Col>
                 </Row>
             </Container>
 
-        </ListGroup.Item>);
+        </ListGroup.Item >);
 
 }
 
@@ -161,13 +180,13 @@ function MyMeme(props) {
                         width: '700px',
                         height: '500px'
                     }} fluid />
-                    <FigureCaption style={styleHighTextmeme1_2l} >
+                    <FigureCaption className={'' + props.image.position1} >
                         {props.tempMeme.text1 ? props.tempMeme.text1 : ""}
                     </FigureCaption>
-                    <FigureCaption style={styleLowTextmeme1_2l} >
+                    <FigureCaption className={'' + props.image.position2} >
                         {props.tempMeme.text2 ? props.tempMeme.text2 : ""}
                     </FigureCaption>
-                    <FigureCaption style={styleLowTextmeme1_2l} >
+                    <FigureCaption className={'' + props.image.position3} >
                         {props.tempMeme.text3 ? props.tempMeme.text3 : ""}
                     </FigureCaption>
                 </Figure>
@@ -273,13 +292,13 @@ function MydModalWithGrid(props) {
                                 width: '500px',
                                 height: '300px'
                             }} fluid />
-                            <FigureCaption style={styleHighTextmeme1_2l} >
+                            <FigureCaption className={selectedImage ? selectedImage.position1 : ""} >
                                 {text1 != "" ? text1 : ""}
                             </FigureCaption>
-                            <FigureCaption style={styleLowTextmeme1_2l} >
+                            <FigureCaption className={selectedImage ? selectedImage.position2 : ""} >
                                 {text2 != "" ? text2 : ""}
                             </FigureCaption>
-                            <FigureCaption style={styleLowTextmeme1_2l} >
+                            <FigureCaption className={selectedImage ? selectedImage.position3 : ""} >
                                 {text3 != "" ? text3 : ""}
                             </FigureCaption>
                         </Col>
@@ -289,20 +308,38 @@ function MydModalWithGrid(props) {
                                     {image.name}
                                 </Dropdown.Item>))}
                             </DropdownButton>
-                            {selectedImage != undefined ?
+                            {selectedImage ?
                                 <Row>
                                     <Form>
                                         <Form.Group >
                                             <Form.Label>Text1</Form.Label>
-                                            <Form.Control type="text" placeholder="Enter description" value={text1} onChange={ev => { setText1(ev.target.value) }} />
+                                            <Form.Control type="text" placeholder="Enter description" value={text1} onChange={ev => { setText1(ev.target.value) }} onKeyPress={event => {
+
+                                                if (event.key === "Enter") {
+                                                    event.preventDefault();
+                                                    //handleSumbit(); props.onHide();
+                                                }
+                                            }} />
                                         </Form.Group >
                                         {selectedImage.ntext > 1 ? <Form.Group >
                                             <Form.Label>Text2</Form.Label>
-                                            <Form.Control type="text" placeholder="Enter description" value={text2} onChange={ev => { setText2(ev.target.value) }} />
+                                            <Form.Control type="text" placeholder="Enter description" value={text2} onChange={ev => { setText2(ev.target.value) }} onKeyPress={event => {
+
+                                                if (event.key === "Enter") {
+                                                    event.preventDefault();
+                                                    //handleSumbit(); props.onHide();
+                                                }
+                                            }} />
                                         </Form.Group > : ""}
                                         {selectedImage.ntext > 2 ? <Form.Group >
                                             <Form.Label>Text3</Form.Label>
-                                            <Form.Control type="text" placeholder="Enter description" value={text3} onChange={ev => { setText3(ev.target.value) }} />
+                                            <Form.Control type="text" placeholder="Enter description" value={text3} onChange={ev => { setText3(ev.target.value) }} onKeyPress={event => {
+
+                                                if (event.key === "Enter") {
+                                                    event.preventDefault();
+                                                    //handleSumbit(); props.onHide();
+                                                }
+                                            }} />
                                         </Form.Group >
                                             : ""}
 
@@ -317,12 +354,12 @@ function MydModalWithGrid(props) {
 
                                 <Form.Group controlid="formDescription">
                                     <Form.Label>Meme title</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter description" value={props.description} onChange={ev => { props.setDescription(ev.target.value); }}
+                                    <Form.Control type="text" placeholder="Enter title" value={title} onChange={ev => { setTitle(ev.target.value) }}
                                         onKeyPress={event => {
 
                                             if (event.key === "Enter") {
                                                 event.preventDefault();
-                                                handleSumbit(); props.onHide();
+                                                //handleSumbit(); props.onHide();
                                             }
                                         }} />
                                 </Form.Group>
