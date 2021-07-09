@@ -153,7 +153,6 @@ function Memes(props) {
 
 function MyMeme(props) {
     const history = useHistory();
-    console.log(props.tempMeme.imageID);
     useEffect(() => {
 
         async function loadMemeImage() {
@@ -175,18 +174,18 @@ function MyMeme(props) {
     return (<Row>
         <Col>
             <Container>
-                <Figure className="position-relative" font="comi">
+                <Figure className="position-relative" >
                     <Image id="loadMemeImage" style={{
                         width: '700px',
                         height: '500px'
                     }} fluid />
-                    <FigureCaption className={'' + props.image.position1} >
+                    <FigureCaption className={'' + props.image.position1+' '+props.tempMeme.font+' '+props.tempMeme.color} >
                         {props.tempMeme.text1 ? props.tempMeme.text1 : ""}
                     </FigureCaption>
-                    <FigureCaption className={'' + props.image.position2} >
+                    <FigureCaption className={'' + props.image.position2+' '+props.tempMeme.font+' '+props.tempMeme.color} >
                         {props.tempMeme.text2 ? props.tempMeme.text2 : ""}
                     </FigureCaption>
-                    <FigureCaption className={'' + props.image.position3} >
+                    <FigureCaption className={'' + props.image.position3+' '+props.tempMeme.font+' '+props.tempMeme.color} >
                         {props.tempMeme.text3 ? props.tempMeme.text3 : ""}
                     </FigureCaption>
                 </Figure>
