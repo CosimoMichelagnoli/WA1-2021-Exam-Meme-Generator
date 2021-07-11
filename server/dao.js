@@ -25,7 +25,7 @@ exports.filterMemesCreators = () => {
       } else {
 
         let memes = [];
-        memes= rows.map((m)=>({memeID: m.memeID, title: m.title, imageID: m.imageID, color: m.color, font: m.font, ntext: m.ntext, text1: m.text1, text2: m.text2, text3: m.text3, protected: m.protected, creator: m.creator }));
+        memes= rows.map((m)=>({memeID: m.memeID, title: m.title, imageID: m.imageID, color: m.color, font: m.font, ntext: m.ntext, text1: m.text1, text2: m.text2, text3: m.text3, protect: (m.protected===1?true:false), creator: m.creator }));
         
         resolve(memes);
       }
@@ -44,7 +44,7 @@ exports.filterMemes = () => {
         } else {
   
           let memes = [];
-          memes= rows.map((m)=>({memeID: m.memeID, title: m.title, imageID: m.imageID, color: m.color, font: m.font, ntext: m.ntext, text1: m.text1, text2: m.text2, text3: m.text3, protected: m.protected, creator: m.creator }));
+          memes= rows.map((m)=>({memeID: m.memeID, title: m.title, imageID: m.imageID, color: m.color, font: m.font, ntext: m.ntext, text1: m.text1, text2: m.text2, text3: m.text3, protect: false, creator: m.creator }));
           
           resolve(memes);
         } 
@@ -85,10 +85,10 @@ exports.getImages = () => {
         return;
       } else {
 
-        let memes = [];
-        memes= rows.map((row)=>({imageID: row.imageID, name: row.name, ntext: row.ntext, position1: row.position1, position2: row.position2, position3: row.position3 }));
+        let images = [];
+        images= rows.map((row)=>({imageID: row.imageID, name: row.name, ntext: row.ntext, position1: row.position1, position2: row.position2, position3: row.position3 }));
         
-        resolve(memes);
+        resolve(images);
       }
 
 
@@ -96,11 +96,38 @@ exports.getImages = () => {
   });
 }
 
+exports.createMeme = (meme) => {
+  return new Promise(async (resolve, reject) => {
+    let lastId = await getLastId();
+    lastId++;
+    console.log("last ID "+lastId);
+    
+    const sql = 'INSERT INTO MEME(memeID, title, imageID, color, font, ntext, text1, text2, text3, protected, creator) VALUES(?,?,?,?,?,?,?,?,?,?,?)';
+    db.run(sql, [lastId, meme.title, parseInt(meme.imageID),meme.color, meme.font, parseInt(meme.ntext), meme.text1, meme.text2, meme.text3, parseInt(meme.protect ? 1 : 0), meme.creator], function (err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(this.lastID);
+    });
+  });
+};
 
-//TODO
+exports.deleteMeme = (id) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'DELETE FROM MEME WHERE memeID=? ';
+    db.run(sql, [id], function (err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(this.lastID);
+    });
+  });
+};
 
 async function getLastId() {
-  const sql1 = 'SELECT MAX(id) FROM TASKS';
+  const sql1 = 'SELECT MAX(memeID) FROM MEME';
   return new Promise((resolve, reject) => {
     db.get(sql1, [], (err, row) => {
       if (err) {
@@ -109,11 +136,15 @@ async function getLastId() {
       } else {
 
 
-        resolve(row["MAX(id)"]);
+        resolve(row["MAX(memeID)"]);
       }
     });
   });
 }
+
+
+//TODO
+/*
 
 
 exports.createTask = (task, userId) => {
@@ -184,4 +215,4 @@ exports.deleteTask = (id, userId) => {
       resolve(this.lastID);
     });
   });
-};
+};*/

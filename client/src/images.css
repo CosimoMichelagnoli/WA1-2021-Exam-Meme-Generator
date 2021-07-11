@@ -100,23 +100,18 @@
 }
 
 .yellow{
-    color:red;
+    color:yellow;
 }
 
 .black{
     color:black;
 }
-
-.comicSans{
-    font-family: cursive
+.red{
+    color:red;
 }
 
 .timesNewRoman{
-    font-family: 'Times New Roman'
-}
-
-.impact{
-    font-family: Impact;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .arial{

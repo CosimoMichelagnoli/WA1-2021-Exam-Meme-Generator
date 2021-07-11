@@ -1,4 +1,4 @@
-import { Form, Button, Container, Row, Col, Navbar } from 'react-bootstrap';
+import { Form, Button, Alert, Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
 
 
@@ -9,19 +9,23 @@ function LoginForm(props) {
     const [errorMessage, setErrorMessage] = useState('');
   
     const handleSubmit = async (event) => {
-      event.preventDefault();
+      
       setErrorMessage('');
       const credentials = { username, password };
       
       let valid = true;
-      if (username === '' || password === '' || password.length < 6 )
+      if (username === '' || password === '' || password.length < 6 ){
         valid = false;
+        event.preventDefault();
+      }
   
       if (valid) {
         const temp = await props.login(credentials);
+
   
   
         if (temp === "Not authorized") {
+          event.preventDefault();
   
           setErrorMessage('Invalid username or password');
   
@@ -30,6 +34,7 @@ function LoginForm(props) {
       }
       else {
         // show a better error message...
+        event.preventDefault();
         let msg;
         if(username==='')
           msg='Username is empty';
@@ -43,6 +48,7 @@ function LoginForm(props) {
         <Row className="justify-content-center">
         <Col xs={5} sm={5} md={3} lg={3} xl={3} >
           <Form className='below-nav'>
+          {errorMessage ? <Alert variant='danger'>{errorMessage}</Alert> : ''}
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control type="username" placeholder="Enter username" value={username} onChange={ev => setUsername(ev.target.value)} />

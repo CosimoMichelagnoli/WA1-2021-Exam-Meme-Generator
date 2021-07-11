@@ -3,9 +3,6 @@ import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from "react";
 import API from "./API";
-
-
-
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Navbar } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,18 +10,16 @@ import { LogoutButton, LoginForm } from './LoginComponents';
 import { MyNav, MyMain, MyMeme, MyEdit } from './Components';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false); // at the beginning, no user is logged in
-  const [meme, setMemes] = useState([]);
+  const [memes, setMemes] = useState([]);
   const [images, setImages] = useState([]);
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState(undefined);
 
   const [message, setMessage] = useState('');
   const [update, setUpdate] = useState(0);
-  const [tempMeme, setTempMeme] = useState('');
+  const [memeTemp, setMemeTemp] = useState('');
   const [image, setMemeImage] = useState('');
   
   useEffect(() => {
-    console.log("useEffect of app.js");
-
     const checkAuth = async () => {
       try {
         // here you have the user info, if already logged in
@@ -40,7 +35,6 @@ function App() {
   }, [loggedIn]);
 
   const doLogIn = async (credentials) => {
-    console.log("in doLogIn of app.js");
     try {
       const user = await API.logIn(credentials);
 
@@ -55,10 +49,24 @@ function App() {
   const doLogOut = async () => {
     await API.logOut();
     setLoggedIn(false);
+    setUser(undefined);
     // clean up everything
     //setCourses([]);
     //setExams([]);
   }
+  const addMeme = (newMeme) => {
+    API.createMeme(newMeme);
+    //setTask(oldTask => [...oldTask, newTask]);
+    setUpdate((before) => before + 1);
+  }
+  const deleteMeme = (id) => {
+
+    API.deleteMeme(id);
+    //setTask(oldTask => [...oldTask, newTask]);
+    setUpdate((before) => before + 1);
+    //setTask((oldTask) => oldTask.filter(t => t.id !== id));
+  }
+  
   return (
     <Router>
       {loggedIn ? <Redirect to="/" /> : ""}
@@ -76,11 +84,13 @@ function App() {
           />
 
           <Route path="/home" render={() =>
-            <MyMain meme={meme} images={images} update={update} user={user} setMemes={setMemes} setImages={setImages} setUpdate={setUpdate} loggedIn = {loggedIn} setTempMeme={setTempMeme} />
+            <MyMain meme={memes} images={images} update={update} user={user} setMemes={setMemes} 
+            setImages={setImages} setUpdate={setUpdate} loggedIn = {loggedIn} memeTemp={memeTemp} setMemeTemp={setMemeTemp}
+            addMeme={addMeme} deleteMeme={deleteMeme} />
           } />
 
           <Route path="/meme:id" render={() =>
-            <MyMeme tempMeme={tempMeme} setMemeImage={setMemeImage} image={image}/>
+            <MyMeme memeTemp={memeTemp}setMemeTemp={setMemeTemp} setMemeImage={setMemeImage} image={image}/>
           } />
 
         </Switch>

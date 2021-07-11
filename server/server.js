@@ -146,64 +146,40 @@ app.get('/api/allImages', (req, res) => {
     .catch((error) => { res.status(500).json(error); });
 });
 
-
-//TODO
-
-app.post('/api/tasks/insert', isLoggedIn, async (req, res) => {
-  const description = req.body.description;
-  const important = req.body.important;
-  const private_ = req.body.private;
-  const deadline = req.body.deadline;
-
-  const task = { description: description, important: important, private: private_, deadline: deadline };
-  try {
-    console.log("server log " + task);
-    await dao.createTask(task, req.user.id);
-    res.end();
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
-
-app.put('/api/tasks/update', isLoggedIn, async (req, res) => {
-
+app.post('/api/meme/insert', isLoggedIn, async (req, res) => {
   const id = req.body.id;
-  const description = req.body.description;
-  const important = req.body.important;
-  const private_ = req.body.private;
-  const deadline = req.body.deadline;
-  console.log("body: " + req.body.deadline);
-  console.log("task: " + deadline);
-  const task = { id: id, description: description, important: important, private: private_, deadline: deadline };
-  try {
-    await dao.updateTask(task, req.user.id);
-    res.end();
+  const title = req.body.title;
+  const imageID = req.body.imageID;
+  const color = req.body.color;
+  const font = req.body.font;
+  const ntext = req.body.ntext;
+  const text1 = req.body.text1;
+  const text2 = req.body.text2;
+  const text3 = req.body.text3;
+  const protect = req.body.protect;
+  const creator = req.body.creator;
+  
+  const meme = { id: id, title: title, imageID: imageID, color: color, font: font, 
+    ntext: ntext,text1: text1,text2: text2,text3: text3,protect: protect,creator: creator};
+    try {
+      console.log("funziona il creator "+meme.creator);
+      await dao.createMeme(meme);
+      res.end();
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  });
+  
+  app.delete('/api/meme/delete/:id', isLoggedIn, async (req, res) => {
+    const id = req.params.id;
+    try {
+      await dao.deleteMeme(id);
+      res.end();
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  });
 
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
 
-app.patch('/api/tasks/mark', isLoggedIn, async (req, res) => {
-  const id = req.body.id;
-  const completed = req.body.completed;
-  const task = { id: id, completed: completed };
-  try {
-    await dao.markCompleted(task, req.user.id);
-    res.end();
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
-
-app.delete('/api/tasks/delete/:id', isLoggedIn, async (req, res) => {
-  const id = req.params.id;
-  try {
-    await dao.deleteTask(id, req.user.id);
-    res.end();
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}/`));
