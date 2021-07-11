@@ -81,7 +81,9 @@ function MyMain(props) {
     const [text3, setText3] = useState('');
     const [protect, setProtect] = useState(false);
     const [creator, setCreator] = useState('');
-    const [theRealC,setTheRealC] = useState('');
+
+    const [theRealC,setTheRealC] = useState(''); //for the ownership
+    const [theRealP,setTheRealP] = useState(''); // for the visibility
 
     const newMeme = {
         id: id, title: title, imageID: imageID, color: color, font: font,
@@ -134,13 +136,13 @@ function MyMain(props) {
             <h1 align="center">Memes list</h1>
 
             <ListGroup className="list-group list-group-flush" >
-                {props.meme.map((meme) => (<Memes key={meme.memeID} thisMeme={meme} setTheRealC={setTheRealC} setModalShow={setModalShow} setFlagUpdate={setFlagUpdate} {...props} />))/*user={props.user} setTempMeme={changeTemp} loggedIn={props.loggedIn}*/}
+                {props.meme.map((meme) => (<Memes key={meme.memeID} thisMeme={meme} setTheRealC={setTheRealC} setTheRealP={setTheRealP} setModalShow={setModalShow} setFlagUpdate={setFlagUpdate} {...props} />))/*user={props.user} setTempMeme={changeTemp} loggedIn={props.loggedIn}*/}
             </ListGroup>
             <Form inline className="mr-auto" >
                 <span className="mr-auto"></span>
                 {props.loggedIn ? <Button onClick={() => { setModalShow(true); setNewMod(true); setFlagUpdate(false); }}>&#43;</Button> : ""}
             </Form>
-            <MydModalWithGrid flagUpdate={flagUpdate} theRealC={theRealC} newMod={newMod} setNewMod={setNewMod} setFlagUpdate={setFlagUpdate} show={modalShow} newMeme={newMeme} setId={setId} setTitle={setTitle} setColor={setColor} setImageID={setImageID} setFont={setFont} setNtext={setNtext} setText1={setText1} setText2={setText2} setText3={setText3} setProtect={setProtect} setCreator={setCreator} onHide={() => setModalShow(false)} {...props} />
+            <MydModalWithGrid flagUpdate={flagUpdate} theRealC={theRealC} theRealP={theRealP} newMod={newMod} setNewMod={setNewMod} setFlagUpdate={setFlagUpdate} show={modalShow} newMeme={newMeme} setId={setId} setTitle={setTitle} setColor={setColor} setImageID={setImageID} setFont={setFont} setNtext={setNtext} setText1={setText1} setText2={setText2} setText3={setText3} setProtect={setProtect} setCreator={setCreator} onHide={() => setModalShow(false)} {...props} />
 
         </main>);
 }
@@ -156,13 +158,6 @@ function MydModalWithGrid(props) {
             const image = await response.json();
             document.getElementById("loadMemeImageModal").src = selectImage(image.name);
             setSelectedImage(image);
-            /*images.forEach(element => {
-                console.log("name: "+element.name);
-                if (element.imageID === props.memeTemp.imageID) {              
-
-
-                }
-            });*/
         }
         
         props.setId(props.memeTemp.id);
@@ -226,7 +221,7 @@ function MydModalWithGrid(props) {
 
 
     const handleSumbit = (event) => {
-        //const task = { id: props.id, title: props.title, important: props.important, private: props.privacy, deadline: props.date };
+        console.log("ma è possibile? "+props.theRealP);
 
         if (props.newMeme.title === '' || props.newMeme.text1 === '' || props.newMeme.imageID === '' || props.user === undefined) {
             setErrorMessage('Error(s) in the modal, please add missing form(s).');
@@ -373,7 +368,7 @@ function MydModalWithGrid(props) {
 
                     <Row>
                         <Col xs={6} md={4}>
-                            {props.user ?props.flagUpdate?props.user.username === props.theRealC ?<Form.Check type="checkbox" id={`Protect`} label={`Protected`} checked={props.newMeme.protect} onChange={ev => { props.setProtect(ev.target.checked); }} />:"":<Form.Check type="checkbox" id={`Protect`} label={`Protected`} checked={props.newMeme.protect} onChange={ev => { props.setProtect(ev.target.checked); }} /> :""}
+                            {props.user ?props.flagUpdate?(props.user.username === props.theRealC || !props.theRealP) ?<Form.Check type="checkbox" id={`Protect`} label={`Protected`} checked={props.newMeme.protect} onChange={ev => { props.setProtect(ev.target.checked); }} />:"":<Form.Check type="checkbox" id={`Protect`} label={`Protected`} checked={props.newMeme.protect} onChange={ev => { props.setProtect(ev.target.checked); }} /> :""}
                         </Col>
                     </Row>
                 </Container>
@@ -404,7 +399,7 @@ function Memes(props) {
                         {/*<small>{props.task.deadline === undefined || props.task.deadline === null ? "" : `${dayjs(props.task.deadline).format("MMM D, YYYY")}`}</small>*/}
                     </Col>
                     <Col align="right" xs={3} sm={3} md={{ span: 2, offset: 1 }} lg={{ span: 2, offset: 1 }} xl={{ span: 2, offset: 1 }}>
-                        {props.loggedIn ? <span onClick={() => { props.setMemeTemp(props.thisMeme);props.setTheRealC(props.thisMeme.creator); props.setModalShow(true); props.setFlagUpdate(true); }}>{copy_icon}</span> : ""}
+                        {props.loggedIn ? <span onClick={() => { props.setMemeTemp(props.thisMeme);props.setTheRealC(props.thisMeme.creator);props.setTheRealP(props.thisMeme.protect); props.setModalShow(true); props.setFlagUpdate(true); }}>{copy_icon}</span> : ""}
                         {'  '}
                         {props.loggedIn ? props.user.username == thisMeme.creator ? <span onClick={() => { props.deleteMeme(props.thisMeme.memeID); }} >{trash_icon}</span> : "" : ""}
                     </Col>
