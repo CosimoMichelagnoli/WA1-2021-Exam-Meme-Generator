@@ -224,7 +224,7 @@ function MydModalWithGrid(props) {
     const handleSumbit = (event) => {
         console.log("ma è possibile? "+props.theRealP);
 
-        if (props.newMeme.title === '' || props.newMeme.text1 === '' || props.newMeme.imageID === '' || props.user === undefined) {
+        if (props.newMeme.title === '' || (props.newMeme.text1 === '' && props.newMeme.text2 === '' && props.newMeme.text3 === '') || props.newMeme.imageID === '' || props.user === undefined) {
             setErrorMessage('Error(s) in the modal, please add missing form(s).');
         } else {
             props.setCreator(props.user.username);
@@ -281,7 +281,7 @@ function MydModalWithGrid(props) {
                         </Col>
                         <Col md={2} lg={3}>
                             {props.flagUpdate ? "" : <DropdownButton id="dropdown-basic-button" className="mr-auto" title="Source image">
-                                {props.images.map((image) => (<Dropdown.Item eventKey={image.name} onSelect={select}>
+                                {props.images.map((image) => (<Dropdown.Item key={image.imageID} eventKey={image.name} onSelect={select}>
                                     {image.name}
                                 </Dropdown.Item>))}
                             </DropdownButton>}
