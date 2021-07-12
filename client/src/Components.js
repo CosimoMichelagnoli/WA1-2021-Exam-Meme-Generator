@@ -140,7 +140,7 @@ function MyMain(props) {
             </ListGroup>
             <Form inline className="mr-auto" >
                 <span className="mr-auto"></span>
-                {props.loggedIn ? <Button onClick={() => { setModalShow(true); setNewMod(true); setFlagUpdate(false); }}>&#43;</Button> : ""}
+                {props.loggedIn ? <Button onClick={() => { setModalShow(true); setNewMod(true); setFlagUpdate(false);setCreator(props.user.username); }}>&#43;</Button> : ""}
             </Form>
             <MydModalWithGrid flagUpdate={flagUpdate} theRealC={theRealC} theRealP={theRealP} newMod={newMod} setNewMod={setNewMod} setFlagUpdate={setFlagUpdate} show={modalShow} newMeme={newMeme} setId={setId} setTitle={setTitle} setColor={setColor} setImageID={setImageID} setFont={setFont} setNtext={setNtext} setText1={setText1} setText2={setText2} setText3={setText3} setProtect={setProtect} setCreator={setCreator} onHide={() => setModalShow(false)} {...props} />
 
@@ -151,6 +151,8 @@ function MydModalWithGrid(props) {
 
     const [errorMessage, setErrorMessage] = useState('');
     const [selectedImage, setSelectedImage] = useState(undefined);
+
+    
 
     if (props.memeTemp) {
         async function loadImage() {

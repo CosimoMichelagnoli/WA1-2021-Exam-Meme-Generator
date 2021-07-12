@@ -9,14 +9,14 @@ function LoginForm(props) {
     const [errorMessage, setErrorMessage] = useState('');
   
     const handleSubmit = async (event) => {
-      
+      event.preventDefault();
       setErrorMessage('');
       const credentials = { username, password };
       
       let valid = true;
       if (username === '' || password === '' || password.length < 6 ){
         valid = false;
-        event.preventDefault();
+    
       }
   
       if (valid) {
@@ -25,7 +25,7 @@ function LoginForm(props) {
   
   
         if (temp === "Not authorized") {
-          event.preventDefault();
+          
   
           setErrorMessage('Invalid username or password');
   

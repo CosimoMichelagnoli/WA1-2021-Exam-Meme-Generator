@@ -14,7 +14,6 @@ function App() {
   const [images, setImages] = useState([]);
   const [user, setUser] = useState(undefined);
 
-  const [message, setMessage] = useState('');
   const [update, setUpdate] = useState(0);
   const [memeTemp, setMemeTemp] = useState('');
   const [image, setMemeImage] = useState('');
@@ -37,11 +36,10 @@ function App() {
   const doLogIn = async (credentials) => {
     try {
       const user = await API.logIn(credentials);
+      setUser(user);
 
       setLoggedIn(true);
-      setMessage({ msg: `Welcome, ${user}!`, type: 'success' });
     } catch (err) {
-      setMessage({ msg: err, type: 'danger' });
       return "Not authorized";
     }
   }
@@ -50,22 +48,16 @@ function App() {
     await API.logOut();
     setLoggedIn(false);
     setUser(undefined);
-    // clean up everything
-    //setCourses([]);
-    //setExams([]);
   }
+
   const addMeme = (newMeme) => {
     API.createMeme(newMeme);
-    //setTask(oldTask => [...oldTask, newTask]);
     setUpdate((before) => before + 1);
   }
   const deleteMeme = (id) => {
-
     API.deleteMeme(id);
-    //setTask(oldTask => [...oldTask, newTask]);
     setUpdate((before) => before + 1);
-    //setTask((oldTask) => oldTask.filter(t => t.id !== id));
-  }
+    }
   
   return (
     <Router>
