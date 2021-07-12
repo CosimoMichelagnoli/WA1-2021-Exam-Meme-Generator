@@ -100,7 +100,6 @@ exports.createMeme = (meme) => {
   return new Promise(async (resolve, reject) => {
     let lastId = await getLastId();
     lastId++;
-    console.log("last ID "+lastId);
     
     const sql = 'INSERT INTO MEME(memeID, title, imageID, color, font, ntext, text1, text2, text3, protected, creator) VALUES(?,?,?,?,?,?,?,?,?,?,?)';
     db.run(sql, [lastId, meme.title, parseInt(meme.imageID),meme.color, meme.font, parseInt(meme.ntext), meme.text1, meme.text2, meme.text3, parseInt(meme.protect ? 1 : 0), meme.creator], function (err) {

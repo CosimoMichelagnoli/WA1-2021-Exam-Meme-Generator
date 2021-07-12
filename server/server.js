@@ -21,7 +21,7 @@ passport.use(new LocalStrategy(
 
     // verification callback for authentication
     userDao.getUser(username, password).then((user) => {
-    console.log("inside THEN of getUser");
+  
 
       if (!user)
         return done(null, false, { message: 'Incorrect username and/or password.' });
