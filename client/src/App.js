@@ -1,13 +1,12 @@
 
-import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from "react";
 import API from "./API";
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import { Form, Button, Container, Row, Col, Navbar } from 'react-bootstrap'
+import {Container} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { LogoutButton, LoginForm } from './LoginComponents';
-import { MyNav, MyMain, MyMeme, MyEdit } from './Components';
+import  {LoginForm}  from './LoginComponents';
+import { MyNav, MyMain, MyMeme} from './Components';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false); // at the beginning, no user is logged in
   const [memes, setMemes] = useState([]);

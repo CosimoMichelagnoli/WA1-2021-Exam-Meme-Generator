@@ -25,30 +25,6 @@ async function deleteMeme(id) {
 
 }
 
-async function updateTask(newTask) {
-  await fetch('/api/tasks/update', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(newTask)
-  }).catch(function (error) {
-    console.log('Failed to store data on server: ', error);
-  });
-}
-
-async function completeTask(newTask) {
-  await fetch('/api/tasks/mark', {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(newTask)
-  }).catch(function (error) {
-    console.log('Failed to mark as completed on server: ', error);
-  });
-}
-
 async function logIn(credentials) {
   console.log("in logIn of API");
 
@@ -90,6 +66,6 @@ async function getUserInfo() {
     throw userInfo;  // an object with the error coming from the server
   }
 }
-const API = { createMeme, deleteMeme, updateTask, completeTask, logIn, logOut, getUserInfo };
+const API = { createMeme, deleteMeme, logIn, logOut, getUserInfo };
 
 export default API;

@@ -167,7 +167,6 @@ function MydModalWithGrid(props) {
         props.setColor(props.memeTemp.color);
         props.setImageID(props.memeTemp.imageID);
         props.setFont(props.memeTemp.font);
-        //props.setNtext(props.memeTemp.ntext);
         props.setText1(props.memeTemp.text1);
         props.setText2(props.memeTemp.text2);
         props.setText3(props.memeTemp.text3);
@@ -192,8 +191,8 @@ function MydModalWithGrid(props) {
         props.setText3(d => d = '');
         props.setProtect(d => d = false);
         props.setNewMod(false);
-        //setSelectedImage(undefined);
-
+        
+        
 
     }
 
@@ -232,7 +231,6 @@ function MydModalWithGrid(props) {
             props.setNtext(selectedImage.ntext);
             setErrorMessage('');
             if (props.flagUpdate) {
-                //props.updateTask(props.meme);
 
                 props.setFlagUpdate(false);
             }
@@ -391,14 +389,10 @@ function Memes(props) {
                 <Row>
                     <Col xs={3} sm={2} md={3} lg={3} xl={3} >
                         <NavLink to={'/meme' + props.thisMeme.memeID} onClick={() => { props.setMemeTemp(props.thisMeme); }}> {props.thisMeme.title} </NavLink>
-                        {/*<Form.Check type="checkbox" id={`check-t${props.task.id}`} className={props.task.important ? "important" : ""} label={props.task.description} checked={completed} onChange={ev => { setCompleted(ev.target.checked); API.completeTask({ id: props.task.id, completed: ev.target.checked ? 1 : 0 }) }} />*/}
                     </Col>
                     <Col xs={2} sm={2} md={2} lg={2} xl={3}>
-                        {/*<small>{props.task.private ? private_icon : ""}</small>*/}
                     </Col>
                     <Col xs={4} sm={4} md={4} lg={4} xl={3}>
-
-                        {/*<small>{props.task.deadline === undefined || props.task.deadline === null ? "" : `${dayjs(props.task.deadline).format("MMM D, YYYY")}`}</small>*/}
                     </Col>
                     <Col align="right" xs={3} sm={3} md={{ span: 2, offset: 1 }} lg={{ span: 2, offset: 1 }} xl={{ span: 2, offset: 1 }}>
                         {props.loggedIn ? <span onClick={() => { props.setMemeTemp(props.thisMeme);props.setTheRealC(props.thisMeme.creator);props.setTheRealP(props.thisMeme.protect); props.setModalShow(true); props.setFlagUpdate(true); }}>{copy_icon}</span> : ""}

@@ -118,7 +118,6 @@ app.delete('/api/sessions/current', (req, res) => {
 });
 
 app.get('/api/memes', isLoggedIn, (req, res) => {
-  console.log("what");
   dao.filterMemesCreators()
     .then((memes) => res.json(memes))
     .catch((error) => { res.status(500).json(error); });
@@ -162,7 +161,6 @@ app.post('/api/meme/insert', isLoggedIn, async (req, res) => {
   const meme = { id: id, title: title, imageID: imageID, color: color, font: font, 
     ntext: ntext,text1: text1,text2: text2,text3: text3,protect: protect,creator: creator};
     try {
-      console.log("funziona il creator "+meme.creator);
       await dao.createMeme(meme);
       res.end();
     } catch (error) {
